@@ -2679,7 +2679,7 @@ function fetch_orders($order_id = NULL, $user_id = NULL, $status = NULL, $rider_
         $search_res->group_End();
     }
     if (empty($sort)) {
-        $sort = `o.date_added`;
+        $sort = 'o.date_added';
     }
     $search_res->group_by('o.id');
     $search_res->order_by($sort, $order);

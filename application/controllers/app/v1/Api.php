@@ -1770,8 +1770,19 @@ class Api extends CI_Controller
             $_POST['is_delivery_charge_returnable'] = (isset($_POST['delivery_charge']) && !empty($_POST['delivery_charge']) && $_POST['delivery_charge'] != '' && $_POST['delivery_charge'] > 0) ? 1 : 0;
             $system_settings = get_settings('system_settings', true);
             $res = $this->Order_model->place_order($_POST);
-            unset($res['order_item_data'][0]['partner_detail_snapshot']);
-            if (!empty($res)) {
+            
+            // Check if the response is valid and has the expected structure
+            if (is_string($res)) {
+                // If response is a string, it might be JSON encoded error
+                $res = json_decode($res, true);
+            }
+            
+            if (!empty($res) && isset($res['error']) && $res['error'] === false) {
+                // Order placed successfully
+                if (isset($res['order_item_data'][0]['partner_detail_snapshot'])) {
+                    unset($res['order_item_data'][0]['partner_detail_snapshot']);
+                }
+                
                 $transaction_id = rand(11111111, 99999999);
                 if ($_POST['payment_method'] == "phonepe") {
                     $data['status'] = "awaiting";
@@ -1784,35 +1795,38 @@ class Api extends CI_Controller
 
                     $this->Transaction_model->add_transaction($data);
                 }
+                
+                // Send notifications only if order was successful
+                if ($_POST['payment_method'] !== 'midtrans' && $_POST['payment_method'] !== 'PayPal' && $_POST['payment_method'] !== 'phonepe' && $_POST['payment_method'] !== 'Flutterwave') {
+
+                    /* notify all system users, partner and user by email and push notification */
+                    $fcm_admin_msg = 'New order placed for ' . $settings['app_name'] . ' please confirm it.';
+                    $fcm_admin_subject = 'New order placed ID #' . $res['order_id'];
+                    send_notifications("", "admins", $fcm_admin_subject, $fcm_admin_msg, "place_order");
+
+                    $fcm_restro_subject = 'New order placed ID #' . $res['order_id'];
+                    send_notifications($res['order_item_data'][0]['partner_id'], "partner", $fcm_restro_subject, "", "place_order");
+
+                    $custom_notification = fetch_details(['type' => "place_order"], 'custom_notifications', '*');
+                    $hashtag_order_id = '< order_id >';
+                    $string = json_encode($custom_notification[0]['title'], JSON_UNESCAPED_UNICODE);
+                    $hashtag = html_entity_decode($string);
+                    $data1 = str_replace($hashtag_order_id, $res['order_id'], $hashtag);
+                    $title = output_escaping(trim($data1, '"'));
+                    $hashtag_application_name = '< application_name >';
+                    $string = json_encode($custom_notification[0]['message'], JSON_UNESCAPED_UNICODE);
+                    $hashtag = html_entity_decode($string);
+                    $data2 = str_replace($hashtag_application_name, $system_settings['app_name'], $hashtag);
+                    $message = output_escaping(trim($data2, '"'));
+
+                    $fcm_user_subject = (!empty($custom_notification)) ? $title : 'Wait for Order Confirmation';
+                    $fcm_user_msg = (!empty($custom_notification)) ? $message : 'Thanks for your order ID #' . $res['order_id'] . '. We will let you know once your order confirm by partner on this email ID.';
+                    send_notifications($res['order_item_data'][0]['user_id'], "user", $fcm_user_subject, $fcm_user_msg, "place_order", $res['order_id']);
+                }
             }
+            
+            // Always return the response
             print_r(json_encode($res));
-
-            if ($_POST['payment_method'] !== 'midtrans' && $_POST['payment_method'] !== 'PayPal' && $_POST['payment_method'] !== 'phonepe' && $_POST['payment_method'] !== 'Flutterwave') {
-
-                /* notify all system users, partner and user by email and push notification */
-                $fcm_admin_msg = 'New order placed for ' . $settings['app_name'] . ' please confirm it.';
-                $fcm_admin_subject = 'New order placed ID #' . $res['order_id'];
-                send_notifications("", "admins", $fcm_admin_subject, $fcm_admin_msg, "place_order");
-
-                $fcm_restro_subject = 'New order placed ID #' . $res['order_id'];
-                send_notifications($res['order_item_data'][0]['partner_id'], "partner", $fcm_restro_subject, "", "place_order");
-
-                $custom_notification = fetch_details(['type' => "place_order"], 'custom_notifications', '*');
-                $hashtag_order_id = '< order_id >';
-                $string = json_encode($custom_notification[0]['title'], JSON_UNESCAPED_UNICODE);
-                $hashtag = html_entity_decode($string);
-                $data1 = str_replace($hashtag_order_id, $res['order_id'], $hashtag);
-                $title = output_escaping(trim($data1, '"'));
-                $hashtag_application_name = '< application_name >';
-                $string = json_encode($custom_notification[0]['message'], JSON_UNESCAPED_UNICODE);
-                $hashtag = html_entity_decode($string);
-                $data2 = str_replace($hashtag_application_name, $system_settings['app_name'], $hashtag);
-                $message = output_escaping(trim($data2, '"'));
-
-                $fcm_user_subject = (!empty($custom_notification)) ? $title : 'Wait for Order Confirmation';
-                $fcm_user_msg = (!empty($custom_notification)) ? $message : 'Thanks for your order ID #' . $res['order_id'] . '. We will let you know once your order confirm by partner on this email ID.';
-                send_notifications($res['order_item_data'][0]['user_id'], "user", $fcm_user_subject, $fcm_user_msg, "place_order", $res['order_id']);
-            }
         }
     }
 
