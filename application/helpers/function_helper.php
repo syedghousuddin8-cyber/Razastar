@@ -2802,7 +2802,11 @@ function fetch_orders($order_id = NULL, $user_id = NULL, $status = NULL, $rider_
             $order_details[$i]['order_items'] = $order_item_data;
         }else{
             $order_items_snapshot = fetch_details(['id' => $order_details[$i]['id']],'orders','order_items_snapshot');
-            $order_details[$i]['order_items'] = $order_items_snapshot[0]['order_items_snapshot'];
+            if (!empty($order_items_snapshot) && !empty($order_items_snapshot[0]['order_items_snapshot'])) {
+                $order_details[$i]['order_items'] = json_decode($order_items_snapshot[0]['order_items_snapshot'], true);
+            } else {
+                $order_details[$i]['order_items'] = [];
+            }
         }
         $order_details[$i] = array_map(function ($value) {
             return $value === NULL ? "" : $value;
