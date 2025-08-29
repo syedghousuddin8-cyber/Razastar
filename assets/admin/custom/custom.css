@@ -6,7 +6,7 @@ body {
 /* Here you can set your admin panel color */
 
 * {
-  --panel-color: #c74240;
+  --panel-color: #16C47F;
 }
 
 .active>i.nav-icon {
@@ -160,7 +160,7 @@ body {
   padding: 0px 10px;
   display: flex;
   justify-content: center;
-  border-top: 3px solid #455efc;
+  border-top: 3px solid #16C47F;
   position: relative;
   transition: all 200ms ease-in;
 }
@@ -173,9 +173,9 @@ body {
   content: '';
   width: 12px;
   height: 12px;
-  background-color: #455efc;
+  background-color: #16C47F;
   border-radius: 12px;
-  border: 2px solid #455efc;
+  border: 2px solid #16C47F;
   position: absolute;
   left: 50%;
   top: 0%;
@@ -675,7 +675,7 @@ img.item-image {
   display: block;
   padding: 10px;
   background-color: #f8f8f8;
-  color: #1C7D88;
+  color: #16C47F;
   text-align: center;
   font-weight: bold;
   height: 40px;
