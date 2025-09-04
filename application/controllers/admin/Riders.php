@@ -183,7 +183,7 @@ class Riders extends CI_Controller
 
                         if ($_POST['percentage'] <= 0 || $_POST['percentage'] > 100) {
                             $response["error"]   = true;
-                            $response["message"] = "Percentage on Delivery Charges is not valid";
+                            $response["message"] = "Percentage on Order Amount is not valid";
                             $response['csrfName'] = $this->security->get_csrf_token_name();
                             $response['csrfHash'] = $this->security->get_csrf_hash();
                             $response["data"] = array();
@@ -267,7 +267,7 @@ class Riders extends CI_Controller
                         if (isset($_POST['percentage']) && !empty($_POST['percentage'])) {
                             if ($_POST['percentage'] <= 0 || $_POST['percentage'] > 100) {
                                 $response["error"]   = true;
-                                $response["message"] = "Percentage on Delivery Charges is not valid";
+                                $response["message"] = "Percentage on Order Amount is not valid";
                                 $response['csrfName'] = $this->security->get_csrf_token_name();
                                 $response['csrfHash'] = $this->security->get_csrf_hash();
                                 $response["data"] = array();

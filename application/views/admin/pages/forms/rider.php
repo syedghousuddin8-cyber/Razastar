@@ -92,14 +92,14 @@
                                     <div class="col-sm-10">
                                         <select class='form-control' name="commission_method" id="commission_method">
                                             <option value=''>Select Method</option>
-                                            <option value='percentage_on_delivery_charges' <?= (isset($fetched_data[0]['commission_method']) && $fetched_data[0]['commission_method'] == 'percentage_on_delivery_charges') ? 'selected' : '' ?>>Percentage on Delivery Charges</option>
+                                            <option value='percentage_on_delivery_charges' <?= (isset($fetched_data[0]['commission_method']) && $fetched_data[0]['commission_method'] == 'percentage_on_delivery_charges') ? 'selected' : '' ?>>Percentage on Order Amount</option>
                                             <option value='fixed_commission_per_order' <?= (isset($fetched_data[0]['commission_method']) && $fetched_data[0]['commission_method'] == 'fixed_commission_per_order') ? 'selected' : '' ?>>Fixed Commission per Order</option>
                                         </select>
                                     </div>
                                 </div>
                                 <div class="form-group d-none row" id="percentage_on_delivery_charges_input">
-                                    <label for="percentage">Percentage on Delivery Charges(%) <span class='text-danger text-sm'>*</span></label>
-                                    <input type="number" class="form-control" name="percentage" id="percentage" value="<?= @$fetched_data[0]['commission'] ?>" placeholder="Percentage on Delivery Charges applied on perticular order" min="0">
+                                    <label for="percentage">Percentage on Order Amount(%) <span class='text-danger text-sm'>*</span></label>
+                                    <input type="number" class="form-control" name="percentage" id="percentage" value="<?= @$fetched_data[0]['commission'] ?>" placeholder="Percentage on Order Amount applied on perticular order" min="0">
                                 </div>
                                 <!-- only for percentage on delivery method -->
                                 <div class="form-group d-none" id="max_commission_per_order_input">
