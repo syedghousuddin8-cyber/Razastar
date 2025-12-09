@@ -221,7 +221,7 @@ function initGoogleMap() {
 
 function loadRiderData() {
     $.ajax({
-        url: '<?= base_url("admin/rider_live_status/get_live_riders") ?>',
+        url: '<?= base_url("admin/riders/get_live_riders") ?>',
         type: 'GET',
         dataType: 'json',
         success: function(response) {
@@ -376,7 +376,7 @@ function updateList() {
 
 function showRiderDetails(riderId) {
     $.ajax({
-        url: '<?= base_url("admin/rider_live_status/get_rider_tracking") ?>/' + riderId,
+        url: '<?= base_url("admin/riders/get_rider_tracking") ?>/' + riderId,
         type: 'GET',
         dataType: 'json',
         success: function(response) {
