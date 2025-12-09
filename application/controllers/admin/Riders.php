@@ -13,13 +13,10 @@ class Riders extends CI_Controller
         $this->load->helper(['url', 'language', 'file']);
         $this->load->model(['Rider_model', 'rating_model']);
         
-        // Skip permission check for rider_live_status methods
-        $uri_segments = $this->uri->segment_array();
-        $current_method = isset($uri_segments[3]) ? $uri_segments[3] : 'index';
+        // Skip permission check for rider_monitor methods
+        $current_method = $this->router->method;
         
-        $skip_methods = ['rider_live_status', 'rider-live-status', 'get_rider_live_status', 'get-rider-live-status', 'get_rider_tracking', 'get-rider-tracking'];
-        
-        if (!in_array($current_method, $skip_methods)) {
+        if ($current_method != 'rider_monitor' && $current_method != 'get_rider_monitor_data' && $current_method != 'get_rider_tracking') {
             if (!has_permissions('read', 'rider')) {
                 $this->session->set_flashdata('authorize_flag', PERMISSION_ERROR_MSG);
                 redirect('admin/home', 'refresh');
@@ -130,16 +127,18 @@ class Riders extends CI_Controller
     /**
      * Rider Live Status Dashboard
      * Monitor all riders in real-time
-     * URL: /admin/riders/rider-live-status
+     * URL: /admin/riders/rider-monitor
      */
-    public function rider_live_status()
+    public function rider_monitor()
     {
-        // Simple echo test first
-        if (isset($_GET['test'])) {
-            echo "SUCCESS! rider_live_status method is accessible!<br>";
+        // Debug output
+        if (isset($_GET['debug'])) {
+            echo "rider_monitor() method called successfully!<br>";
             echo "URI: " . $this->uri->uri_string() . "<br>";
-            echo "Method: " . $this->router->method . "<br>";
+            echo "Router Method: " . $this->router->method . "<br>";
             echo "Class: " . get_class($this) . "<br>";
+            echo "Logged in: " . ($this->ion_auth->logged_in() ? 'Yes' : 'No') . "<br>";
+            echo "Is Admin: " . ($this->ion_auth->is_admin() ? 'Yes' : 'No') . "<br>";
             exit;
         }
 
@@ -158,9 +157,9 @@ class Riders extends CI_Controller
 
     /**
      * Get all active riders with live status (AJAX)
-     * URL: /admin/riders/get-rider-live-status
+     * URL: /admin/riders/get-rider-monitor-data
      */
-    public function get_rider_live_status()
+    public function get_rider_monitor_data()
     {
         if (!$this->ion_auth->logged_in() || !$this->ion_auth->is_admin()) {
             $this->response['error'] = true;

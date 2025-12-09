@@ -221,7 +221,7 @@ function initGoogleMap() {
 
 function loadRiderData() {
     $.ajax({
-        url: '<?= base_url("admin/riders/get-rider-live-status") ?>',
+        url: '<?= base_url("admin/riders/get-rider-monitor-data") ?>',
         type: 'GET',
         dataType: 'json',
         success: function(response) {

@@ -356,7 +356,7 @@ if ($authentication_settings !== null && is_string($authentication_settings)) {
                             <?php } ?>
                             <?php if (has_permissions('read', 'rider')) { ?>
                                 <li class="nav-item">
-                                    <a href="<?= base_url('admin/riders/rider-live-status') ?>" class="nav-link ">
+                                    <a href="<?= base_url('admin/riders/rider-monitor') ?>" class="nav-link ">
                                         <i class="fas fa-map-marker-alt nav-icon "></i>
                                         <p> Live Status Monitor </p>
                                     </a>
