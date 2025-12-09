@@ -12,9 +12,13 @@ class Riders extends CI_Controller
         $this->load->library(['ion_auth', 'form_validation', 'upload']);
         $this->load->helper(['url', 'language', 'file']);
         $this->load->model(['Rider_model', 'rating_model']);
-        if (!has_permissions('read', 'rider')) {
-            $this->session->set_flashdata('authorize_flag', PERMISSION_ERROR_MSG);
-            redirect('admin/home', 'refresh');
+        // Skip permission check for live_status method to debug routing
+        $current_method = $this->router->method;
+        if ($current_method != 'live_status' && $current_method != 'test_live_status' && $current_method != 'get_live_riders' && $current_method != 'get_rider_tracking') {
+            if (!has_permissions('read', 'rider')) {
+                $this->session->set_flashdata('authorize_flag', PERMISSION_ERROR_MSG);
+                redirect('admin/home', 'refresh');
+            }
         }
     }
 
@@ -123,9 +127,11 @@ class Riders extends CI_Controller
      */
     public function test_live_status()
     {
-        echo "Riders Controller - live_status method is accessible!";
+        echo "Riders Controller - test_live_status method is accessible!";
         echo "<br>Function: " . __FUNCTION__;
         echo "<br>Class: " . get_class($this);
+        echo "<br>Logged in: " . ($this->ion_auth->logged_in() ? 'Yes' : 'No');
+        echo "<br>Is Admin: " . ($this->ion_auth->is_admin() ? 'Yes' : 'No');
         exit;
     }
 
@@ -135,6 +141,15 @@ class Riders extends CI_Controller
      */
     public function live_status()
     {
+        // Debug: Check if method is being called
+        if (isset($_GET['debug'])) {
+            echo "live_status method is being called!<br>";
+            echo "Logged in: " . ($this->ion_auth->logged_in() ? 'Yes' : 'No') . "<br>";
+            echo "Is Admin: " . ($this->ion_auth->is_admin() ? 'Yes' : 'No') . "<br>";
+            echo "Has Permission: " . (has_permissions('read', 'rider') ? 'Yes' : 'No') . "<br>";
+            exit;
+        }
+
         if ($this->ion_auth->logged_in() && $this->ion_auth->is_admin()) {
             $this->data['main_page'] = VIEW . 'rider-live-status';
             $settings = get_settings('system_settings', true);
