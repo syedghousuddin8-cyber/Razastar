@@ -1696,7 +1696,7 @@ class Api extends CI_Controller
     //8.place_order
     public function place_order()
     {
-
+        
         /*
             user_id:5
             mobile:9974692496
@@ -1797,7 +1797,7 @@ class Api extends CI_Controller
                 }
                 
                 // Send notifications only if order was successful
-                if ($_POST['payment_method'] !== 'midtrans' && $_POST['payment_method'] !== 'PayPal' && $_POST['payment_method'] !== 'phonepe' && $_POST['payment_method'] !== 'Flutterwave') {
+                if ($_POST['payment_method'] !== 'midtrans' && $_POST['payment_method'] !== 'PayPal' && $_POST['payment_method'] !== 'phonepe' && $_POST['payment_method'] !== 'Flutterwave' && $_POST['payment_method'] !== 'razorpay') {
 
                     /* notify all system users, partner and user by email and push notification */
                     $fcm_admin_msg = 'New order placed for ' . $settings['app_name'] . ' please confirm it.';
