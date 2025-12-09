@@ -756,7 +756,7 @@ class Api extends CI_Controller
 
             $config = [
                 'upload_path' => FCPATH . USER_IMG_PATH,
-                'allowed_types' => 'jpeg|gif|jpg|png',
+                'allowed_types' => 'jpeg|gif|jpg|png|webp',
             ];
 
             $image_new_name = '';
@@ -1918,7 +1918,7 @@ class Api extends CI_Controller
             $images_info_error = "";
             $config = [
                 'upload_path' => FCPATH . REVIEW_IMG_PATH,
-                'allowed_types' => 'jpg|png|jpeg|gif',
+                'allowed_types' => 'jpg|png|jpeg|gif|webp',
                 'max_size' => 8000,
             ];
 
@@ -2051,7 +2051,7 @@ class Api extends CI_Controller
             $images_info_error = "";
             $config = [
                 'upload_path' => FCPATH . REVIEW_IMG_PATH,
-                'allowed_types' => 'jpg|png|jpeg|gif',
+                'allowed_types' => 'jpg|png|jpeg|gif|webp',
                 'max_size' => 8000,
             ];
 

@@ -199,7 +199,7 @@ class Riders extends CI_Controller
                 $profile_error = "";
                 $config = [
                     'upload_path' =>  FCPATH . USER_IMG_PATH,
-                    'allowed_types' => 'jpg|png|jpeg|gif',
+                    'allowed_types' => 'jpg|png|jpeg|gif|webp',
                     'max_size' => 8000,
                 ];
                 if (isset($logo_files['profile']) && !empty($logo_files['profile']['name']) && isset($logo_files['profile']['name'])) {

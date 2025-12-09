@@ -34,7 +34,7 @@ $config['system_modules'] = [
 
 $config['type'] = array(
     'image' => array(
-        'types' => array('jpg', 'jpeg', 'png', 'gif', 'bmp', 'eps'),
+        'types' => array('jpg', 'jpeg', 'png', 'gif', 'bmp', 'eps', 'webp'),
         'icon' => ''
     ),
     'video' => array(
