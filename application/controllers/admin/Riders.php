@@ -119,6 +119,17 @@ class Riders extends CI_Controller
     }
 
     /**
+     * Test method - verify routing works
+     */
+    public function test_live_status()
+    {
+        echo "Riders Controller - live_status method is accessible!";
+        echo "<br>Function: " . __FUNCTION__;
+        echo "<br>Class: " . get_class($this);
+        exit;
+    }
+
+    /**
      * Rider Live Status Dashboard
      * Monitor all riders in real-time
      */
