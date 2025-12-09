@@ -12,9 +12,15 @@ class Riders extends CI_Controller
         $this->load->library(['ion_auth', 'form_validation', 'upload']);
         $this->load->helper(['url', 'language', 'file']);
         $this->load->model(['Rider_model', 'rating_model']);
-        // Skip permission check for live_status method to debug routing
-        $current_method = $this->router->method;
-        if ($current_method != 'live_status' && $current_method != 'test_live_status' && $current_method != 'get_live_riders' && $current_method != 'get_rider_tracking') {
+        
+        // Get current method from URI
+        $uri_segments = $this->uri->segment_array();
+        $current_method = isset($uri_segments[3]) ? $uri_segments[3] : 'index';
+        
+        // Skip permission check for live_status methods to debug routing
+        $skip_methods = ['live_status', 'live-status', 'test_live_status', 'test-live-status', 'get_live_riders', 'get-live-riders', 'get_rider_tracking', 'get-rider-tracking'];
+        
+        if (!in_array($current_method, $skip_methods)) {
             if (!has_permissions('read', 'rider')) {
                 $this->session->set_flashdata('authorize_flag', PERMISSION_ERROR_MSG);
                 redirect('admin/home', 'refresh');
@@ -141,12 +147,12 @@ class Riders extends CI_Controller
      */
     public function live_status()
     {
-        // Debug: Check if method is being called
-        if (isset($_GET['debug'])) {
-            echo "live_status method is being called!<br>";
-            echo "Logged in: " . ($this->ion_auth->logged_in() ? 'Yes' : 'No') . "<br>";
-            echo "Is Admin: " . ($this->ion_auth->is_admin() ? 'Yes' : 'No') . "<br>";
-            echo "Has Permission: " . (has_permissions('read', 'rider') ? 'Yes' : 'No') . "<br>";
+        // Simple test first
+        if (isset($_GET['test'])) {
+            echo "SUCCESS: live_status method is accessible!<br>";
+            echo "URI: " . $this->uri->uri_string() . "<br>";
+            echo "Method: " . $this->router->method . "<br>";
+            echo "Class: " . get_class($this) . "<br>";
             exit;
         }
 
@@ -161,6 +167,14 @@ class Riders extends CI_Controller
         } else {
             redirect('admin/login', 'refresh');
         }
+    }
+    
+    /**
+     * Alternative method name - try this if live_status doesn't work
+     */
+    public function liveStatus()
+    {
+        $this->live_status();
     }
 
     /**
