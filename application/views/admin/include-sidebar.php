@@ -354,6 +354,14 @@ if ($authentication_settings !== null && is_string($authentication_settings)) {
                                     </a>
                                 </li>
                             <?php } ?>
+                            <?php if (has_permissions('read', 'rider')) { ?>
+                                <li class="nav-item">
+                                    <a href="<?= base_url('admin/rider-live-status') ?>" class="nav-link ">
+                                        <i class="fas fa-map-marker-alt nav-icon "></i>
+                                        <p> Live Status Monitor </p>
+                                    </a>
+                                </li>
+                            <?php } ?>
                             <?php if (has_permissions('read', 'rider_requests')) { ?>
                                 <li class="nav-item">
                                     <a href="<?= base_url('admin/riders/rider_registration_request') ?>" class="nav-link ">
